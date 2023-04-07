@@ -29,15 +29,23 @@ export class App extends Component {
       });
   };
 
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem('contacts'));
+    if (contacts) {
+      this.setState({ contacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   deleteContact = id => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
-  };
-
-  handleFilterChange = e => {
-    const findName = e.target.value.trim();
-    this.setState({ filter: findName.toLocaleLowerCase() });
   };
 
   changeFilter = e => {
